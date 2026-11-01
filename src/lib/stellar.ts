@@ -50,7 +50,7 @@ export async function contributeOnTestnet(
   const fee = await server.fetchBaseFee();
   const shortId = campaignId.replace(/[^a-zA-Z0-9]/g, '').slice(0, 12) || 'campaign';
   const transaction = new TransactionBuilder(source, {
-    fee,
+    fee: String(fee),
     networkPassphrase: Networks.TESTNET,
   })
     .addOperation(Operation.payment({
