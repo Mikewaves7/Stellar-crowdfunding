@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import {
   ArrowDownRight, ArrowRight, ArrowUpRight, BadgeCheck, BookOpen, Check, ChevronDown,
   CircleDollarSign, Clock3, Compass, Copy, ExternalLink, HeartHandshake, Leaf, Menu,
@@ -173,13 +173,13 @@ function CreateModal({wallet,onClose,onCreate,onConnect}:{wallet:WalletInfo|null
   const [receiver,setReceiver] = useState(wallet?.address || '');
   const [localError,setLocalError] = useState('');
   useEffect(() => { if(wallet) setReceiver(wallet.address); },[wallet]);
-  const submit = (e:React.FormEvent) => {
+  const submit = (e:FormEvent) => {
     e.preventDefault(); const value = Number(goal);
     if(title.trim().length < 5 || description.trim().length < 20) { setLocalError('Add a title (5+ characters) and a description (20+ characters).'); return; }
     if(!Number.isFinite(value) || value <= 0) { setLocalError('Enter a valid funding goal.'); return; }
     if(!/^G[A-Z2-7]{55}$/.test(receiver.trim())) { setLocalError('Enter a valid Stellar public receiving address.'); return; }
     if(new Date(deadline).getTime() <= Date.now()) { setLocalError('Choose a future deadline.'); return; }
-    onCreate({title:title.trim(),description:description.trim(),category,goal:value,raised:0,creator:receiver.trim(),deadline,image:image.trim() || 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&w=1200&q=85'});
+    onCreate({title:title.trim(),description:description.trim(),category,goal:value,creator:receiver.trim(),deadline,image:image.trim() || 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&w=1200&q=85'});
   };
   return <div className="modal-layer" onMouseDown={e=>{if(e.target===e.currentTarget)onClose();}}><div className="modal-box"><button className="close" onClick={onClose}><X/></button><div className="eyebrow">START SOMETHING GOOD</div><h2>Create a campaign</h2><p className="modal-intro">Set a goal and publish a campaign in this browser. Your connected wallet receives contributions directly.</p>
     {!wallet && <div className="inline-warning">Connect Freighter on Testnet to create a campaign. <button onClick={onConnect}>Connect wallet</button></div>}
