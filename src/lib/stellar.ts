@@ -1,10 +1,10 @@
 import {
-  Asset, Memo, Networks, Operation, Server, TransactionBuilder,
+  Asset, Horizon, Memo, Networks, Operation, TransactionBuilder,
 } from '@stellar/stellar-sdk';
 import { getNetwork, isConnected, requestAccess, signTransaction } from '@stellar/freighter-api';
 
 const HORIZON_URL = 'https://horizon-testnet.stellar.org';
-const server = new Server(HORIZON_URL);
+const server = new Horizon.Server(HORIZON_URL);
 
 export async function connectWallet(): Promise<{ address: string; balance: string }> {
   const installed = await isConnected();
@@ -63,7 +63,7 @@ export async function contributeOnTestnet(
     .build();
 
   const signed = await signTransaction(transaction.toXDR(), {
-    network: 'TESTNET',
+    networkPassphrase: Networks.TESTNET,
     address: sender,
   });
   if (signed.error) throw new Error(signed.error.message);
